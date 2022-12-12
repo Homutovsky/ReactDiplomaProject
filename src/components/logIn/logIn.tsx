@@ -105,7 +105,6 @@ export const LogIn = () => {
             placeholder='Enter login'
             InputProps={{
               startAdornment: <InputAdornment position="start"></InputAdornment>,
-              sx:{color: currentTheme.theme.color}
             }}
           />
           <FormControl 
@@ -132,13 +131,13 @@ export const LogIn = () => {
             />
           </FormControl>
           <FormGroup>
-            <FormControlLabel  style={{color:`${currentTheme.color}`}} onChange={toggleControler} control={<Checkbox /> } label="accept the terms" />
+            <FormControlLabel onChange={toggleControler} control={<Checkbox /> } label="accept the terms" />
           </FormGroup>
           
           <Button 
           onClick={onLogin} disabled={(login.value && values.password && controler )? false:true} variant="contained">Log In</Button>
     
-          <Button onClick={onSignUp} style={{...buttonStyle, color:`${currentTheme.color}`}}  >
+          <Button onClick={onSignUp} style={{...buttonStyle}}  >
                       Registration
           </Button>        
         </Form>        

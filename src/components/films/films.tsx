@@ -47,7 +47,7 @@ export const Films = () => {
   return (
       <>
         {/* <CarouselComponent></CarouselComponent> */}
-        <div className={'background'}></div>
+        <div style={{backgroundImage: currentTheme.theme.backgroundImage}} className={'background'}></div>
         <div  style={{...styleDiv, position:'relative', zIndex:'1'}}>
         <input onKeyDown={getSearch} onChange={(event) => setInputValue(event.target.value)} value={inputValue} type="text" style={inputStyle}/>
         <div style={wrapperStyle}>
