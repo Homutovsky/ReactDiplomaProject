@@ -19,7 +19,6 @@ export const SelectedFromSearch = () => {
   const getFilmById = async () => {
     try {
       const responce = await axios.get(`https://api.kinopoisk.dev/movie?field=id&search=${params.id}&token=FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ`)
-      console.log('responce', responce)
     setPost(responce.data)
     }
     catch (error) {
@@ -54,7 +53,6 @@ useEffect(() => {
     }
   }
 
-  
   
   return (
     <>
@@ -100,7 +98,7 @@ useEffect(() => {
       </div>
     </div>
     <div style={{marginTop:'60px', display:'flex', justifyContent:'center'}}>
-    {<ReactPlayer width='807px' height='453px' url = { post.videos?.trailers?.map((item:any) => item?.url)}  />}
+    {<ReactPlayer width='807px' height='453px' url = { post?.videos?.trailers?.[0]?.url}  />}
   </div>
     </div>
     </>

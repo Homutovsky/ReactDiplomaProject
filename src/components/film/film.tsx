@@ -1,61 +1,72 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { divForMap, inputStyle } from '../common/style.styled'
+import { buttonCloseStyle, divForMap, inputStyle } from '../common/style.styled'
 
 import ReactPlayer from 'react-player'
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
 import { useTheme } from '../theme/ThemeProvider'
 import '../.././App.css';
-import { addFilmInArr} from '../redux/reducer/filmsSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { addFilmFromSearchInArr, addFilmToFavorites } from '../redux/reducer/filmsSlice'
+import { AppDispatch } from '../redux/store'
+
 
 export const Film = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const params = useParams()
-  const [error, setError] = useState(false)
   const currentTheme = useTheme()
-
   const navigate = useNavigate()
-  const [inputValue, setInputValue] = useState('')
-  const [searchResult, setSearch] = useState<any>([])
-  const getSearch = (event:any) => {
-    if (event.code === "Enter" && inputValue !== "") {
-      const getFilmByName = async () => {
-        try {
-          let upperSearchKey = inputValue.split('')[0].toUpperCase() + inputValue.slice(1, inputValue.length)
-          const responce = await axios.get(`https://api.kinopoisk.dev/movie?field=name&search=${upperSearchKey}&token=FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ`)
-          if (responce.data.docs.length) {
-            setSearch(responce)
-            navigate(`/foundFilms/${searchResult.data.docs[0].name}`)
-          } else {
-            navigate(`/errorPage`)
-          }
-        }
-        catch (error) {
-      }
-    }
-    getFilmByName()  
-    }
-  }
 
+  
+
+  const [film, setFilm] = useState<any>()
   const getFilmById = async () => {
     try {
-      const responce = await axios.get(`https://api.kinopoisk.dev/movie?field=id&search=${params.id}&token=FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ`)
-      dispatch(addFilmInArr({data: responce.data}))
+      const response = await axios.get(`https://api.kinopoisk.dev/movie?field=id&search=${params.id}&token=FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ`)
+      setFilm(response.data)
     }
     catch (error) {
-      setError(true)
+      navigate(`/errorPage`)
   }
 }
 
   useEffect(() => {
     getFilmById()
-  },[]) 
+  },[])
 
-  const post = useSelector((state:any) => state?.films?.filmArr?.data)
+  const [addFilm, setAddFilm] = useState<any>(false)
+  const pressFilmToFavorites = () => {
+    setAddFilm((prev:any) => !prev)
+    dispatch(addFilmToFavorites(film))
+    
+  }
+  const pressFilmRemoveFromFavorites = () => {
+    setAddFilm((prev:any) => !prev)
+  }
+
+
+  const [inputValue, setInputValue] = useState('')
+  const getSearch = async (event:any) => {
+    if (event.code === "Enter" && inputValue !== "") {
+      
+        try {
+          let upperSearchKey = inputValue.split('')[0].toUpperCase() + inputValue.slice(1, inputValue.length)
+          const responce = await axios.get(`https://api.kinopoisk.dev/movie?field=name&search=${upperSearchKey}&token=FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ`)
+          if (responce.data.docs.length) {
+            dispatch(addFilmFromSearchInArr(responce.data.docs))
+            navigate(`/foundFilms/${responce.data.docs[0].name}`)
+          } 
+        }
+        catch (error) {
+          navigate(`/errorPage`)
+      }
+    }
+  }
 
   return (
     <>
@@ -66,11 +77,10 @@ export const Film = () => {
         </div>
         <div style={{display:'flex', columnGap:'50px', maxWidth:'1350px', margin:'0 auto', justifyContent:'center', color: currentTheme.theme.color}}>
           <div>
-            {error && <h2>ERROR REQUEST</h2>}
             <h3 style={{textAlign:'center', display:'flex', flexWrap:'wrap', maxWidth:'360px'}}>
-              {post?.name || post?.alternativeName}({post?.year})
+              {film?.name || film?.alternativeName}({film?.year})
             </h3>
-            <img src={`${post.poster?.previewUrl}`} alt="poster"></img>
+            <img src={`${film?.poster?.previewUrl}`} alt="poster"></img>
           </div>
           <div style={{display:'flex', flexDirection:'column', marginTop:'51px', maxWidth:'400px'}}>
               <Box
@@ -79,31 +89,36 @@ export const Film = () => {
                       }}
                     >
                       <Typography component="legend">Rating</Typography>
-                      <Rating name="read-only" value={Math.round(post.rating?.imdb/2)} readOnly />
+                      <Rating name="read-only" value={Math.round(film?.rating?.imdb/2)} readOnly />
               </Box>
               <div style={divForMap}>
                   <h3>страна: </h3>
-                  {post.countries?.map((item:any) => ( 
+                  {film?.countries?.map((item:any) => ( 
                         <p key={item?.name}>/ {item?.name}</p>    
                         ))}
               </div>
               <div style={divForMap}>
                   <h3>жанр: </h3>
-                  {post.genres?.map((item:any) => ( 
+                  {film?.genres?.map((item:any) => ( 
                       <p key={item?.name}> / {item?.name} </p>    
                       ))}
               </div>
               <h3>описание :</h3>
               <p>
-                  {post?.description}
+                  {film?.description}
               </p>
-              <h3>премьера({post.premiere?.country}) : {post.premiere?.world?.split('').splice(0, 10).join('')}</h3>
+              <h3>премьера({film?.premiere?.country}) : {film?.premiere?.world?.split('').splice(0, 10).join('')}</h3>
+              {!addFilm ? <Fab onClick={pressFilmToFavorites} size="medium" color="primary" aria-label="add">
+                <AddIcon />
+              </Fab> : <button onClick={pressFilmRemoveFromFavorites} style={buttonCloseStyle}>1</button>}
+              
+              
           </div>
         </div>
         <div style={{marginTop:'60px', display:'flex', justifyContent:'center'}}>
-        {<ReactPlayer width='807px' height='453px' url = { post.videos?.trailers?.map((item:any) => item?.url)}  />}
+        {<ReactPlayer width='807px' height='453px' url = { film?.videos?.trailers?.[0]?.url}  />}
         </div>
-    </div>
+    </div> 
   </>
   )
 }

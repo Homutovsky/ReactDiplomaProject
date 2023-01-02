@@ -93,7 +93,7 @@ export const LogIn = () => {
 
   return (  
     <Container maxWidth="sm">
-      <Box sx={{...currentTheme.theme, background:null, backgroundColor:null}}>    
+      <Box sx={{...currentTheme.theme, background:null, backgroundColor:null, backgroundImage:null}}>    
         <Form>
           <h1 className='FormName'>Log In</h1>
             <TextField 

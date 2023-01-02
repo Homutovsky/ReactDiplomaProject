@@ -107,11 +107,12 @@ export const divStyle:Styles = {
 }
 
 export const postBlock:Styles = {
-    height: '485px',
+    width:'300px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     border: '1px solid #000',
+    alignItems:'center',
     textDecoration:'none'
 }
 
@@ -158,6 +159,7 @@ export const inputStyle:Styles = {
     borderTop:'none',
     borderRadius:'0 0 10px 10px ',
     outline: '0',
+    
 }
 
 export const headerStyle:Styles = {
@@ -170,4 +172,26 @@ export const headerStyle:Styles = {
     left: '0',
     top: '0',
     zIndex:'2'
+}
+
+export const buttonCloseStyle:Styles = {
+    width:'50px', 
+    height:'50px', 
+    borderRadius:'50%', 
+    border:'1px solid #000', 
+    backgroundImage:`url("https://st4.depositphotos.com/7662228/30135/v/450/depositphotos_301358358-stock-illustration-green-check-mark-and-red.jpg")`, 
+    cursor:'pointer', 
+    backgroundSize:'cover'
+}
+
+export const buttonRemoveFavoritesFilms:Styles = {
+    height:'50px', 
+    backgroundColor:'#fff', 
+    border:'1px solid #000', 
+    cursor:'pointer', 
+    backgroundImage:`url("https://st4.depositphotos.com/7662228/30135/v/450/depositphotos_301358358-stock-illustration-green-check-mark-and-red.jpg")`, 
+    backgroundSize:'contain',
+    backgroundRepeat:'no-repeat',
+    backgroundPosition:'center',
+    
 }

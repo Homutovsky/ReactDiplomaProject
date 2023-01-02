@@ -11,10 +11,11 @@ import Cookies from "js-cookie";
 
 
 interface SignUpPropsType {
-  onSubmit:(param:{}) => void
+  onSubmit:(param:{}) => void,
+  setIsLogined:any
 }
 
-export const SignUp: FC<any> = ( {onSubmit}:SignUpPropsType) => {
+export const SignUp: FC<any> = ( {onSubmit, setIsLogined}:SignUpPropsType) => {
 
   const {value:firstName, onChange:setFirstName} = PatternTextField('');
   const {value:lastName, onChange:setLastName} = PatternTextField('');
@@ -27,6 +28,7 @@ export const SignUp: FC<any> = ( {onSubmit}:SignUpPropsType) => {
   }
   const onSignIn = () => {
     Cookies.remove('logined')
+    setIsLogined(false)
     navigate('/')
   }
 
@@ -55,7 +57,7 @@ export const SignUp: FC<any> = ( {onSubmit}:SignUpPropsType) => {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{...currentTheme.theme, background:null, backgroundColor:null}}>
+      <Box sx={{...currentTheme.theme, background:null, backgroundColor:null, backgroundImage:null }}>
         <Form onSubmit={sendForm}>
           <h1 className='FormName'>Sign Up</h1>
         
@@ -120,7 +122,7 @@ export const SignUp: FC<any> = ( {onSubmit}:SignUpPropsType) => {
           onChange={setRepeatPassword}
           />
           <Button
-          onClick={() => navigate('/')}
+          onClick={onSignIn}
           type="submit" 
           variant="contained" 
           disableElevation

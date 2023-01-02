@@ -1,9 +1,20 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { FilmArr, FoundFilms } from '../../types.ts/types';
 
-const initialState = {
+type InitialState =  {
+  filmsArr: any,
+  filmArr: FilmArr,
+  foundFilms: FoundFilmsArray,
+  favorites:any
+}
+
+type FoundFilmsArray = Array<FoundFilms>
+
+const initialState:InitialState = {
   filmsArr: [],
   filmArr: [],
-  foundFilms: []
+  foundFilms: [],
+  favorites:[]
 };
 
 const filmsSlice = createSlice({
@@ -13,15 +24,21 @@ const filmsSlice = createSlice({
     addFilmsInArr(state, action) {
       state.filmsArr = action.payload
     },
-    addFilmInArr(state, action) {
+    addFilmInArr(state, action:PayloadAction<FilmArr>) {
       state.filmArr = action.payload
     },
-    addFilmFromSearchInArr(state, action) {
-      state.filmArr = action.payload
+    addFilmFromSearchInArr(state, action:PayloadAction<FoundFilmsArray>) {
+      state.foundFilms = action.payload
+    },
+    addFilmToFavorites(state:any, action:any) {
+      state.favorites.push(action.payload)
+    },
+    removeFilmToFavorites(state:any, action:any) {
+      state.favorites = state.favorites.filter((item:any) => item.id !== action.payload)
     },
   }
 });
 
-export const { addFilmsInArr, addFilmInArr, addFilmFromSearchInArr } = filmsSlice.actions;
+export const { addFilmsInArr, addFilmInArr, addFilmFromSearchInArr, addFilmToFavorites, removeFilmToFavorites } = filmsSlice.actions;
 
 export default filmsSlice.reducer;

@@ -2,16 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { Routes, Route, useNavigate, useLocation} from 'react-router-dom'
 import Cookies from "js-cookie";
 
-import {LogIn} from './components/logIn/logIn';
-import {SignUp} from './components/signUp/signUp';
+import { LogIn } from './components/logIn/logIn';
+import { SignUp } from './components/signUp/signUp';
 
-import {ThemeContext, useTheme} from './components/theme/ThemeProvider'
+import { ThemeContext, useTheme } from './components/theme/ThemeProvider'
 import { themes } from './components/theme/themes';
 
 import './App.css'
 import { Header } from "./components/Header/Header";
 import { Profile } from "./components/profile/profile";
-import { UserPost } from "./components/userPost/userPost";
+import { FavoritesFilms } from "./components/FavoritesFilms/favoritesFilms";
 import { Film } from "./components/film/film";
 import { UserContext } from "./userContext";
 import { StyledApp } from "./components/common/style.styled";
@@ -19,7 +19,6 @@ import { FoundFilms } from "./components/foundFilms/foundFilms";
 import { Films } from "./components/films/films"
 import { SelectedFromSearch } from "./components/foundFilms/selectedFromSearch/selectedFromSearch";
 import { ErrorPage } from "./components/errorPage/errorPage";
-
 
 function App(): JSX.Element {
 
@@ -42,17 +41,18 @@ function App(): JSX.Element {
   }
 
   const [logined, setLogined] = useState(false)
+  const [isLogined, setIsLogined] = useState<any>(null)
   
   const navigate = useNavigate()
   const location = useLocation()
 
-  setInterval(() => {
-    const isLogined:any = Cookies.get('logined')
+  useEffect(() => {
+    setIsLogined(Cookies.get('logined'))
     if(!isLogined) {
       setLogined(false)
       navigate('/')
     }
-  }, 1000 * 60)
+  },[isLogined])
 
   useEffect(() => {
     const isLogined:any = Cookies.get('logined')
@@ -76,14 +76,15 @@ function App(): JSX.Element {
           {logined && <Header/>}
                 <Routes>
                   <Route path='/' element={<LogIn/>}/>
-                  <Route path='/SignUp' element={<SignUp/>}/>
+                  <Route path='/SignUp' element={<SignUp setIsLogined={setIsLogined}/>}/>
                   <Route path='/films' element={<Films/>}/>
-                  <Route path='/userPost' element={<UserPost/>}/>
+                  <Route path='/favoritesFilms' element={<FavoritesFilms/>}/>
                   <Route path='/profile' element={<Profile/>}/>
                   <Route path='/films/:id' element={<Film/>}/>
                   <Route path='/foundFilms/:name' element={<FoundFilms/>}/>
                   <Route path='/selectedFromSearch/:id' element={<SelectedFromSearch/>}/>
                   <Route path='/errorPage' element={<ErrorPage/>}/>
+                  
                 </Routes>
         </StyledApp>
       </ThemeContext.Provider>
