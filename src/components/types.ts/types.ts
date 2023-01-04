@@ -1,5 +1,5 @@
 
-export interface FoundFilms {
+export type FoundFilmsArray = Array<{
   alternativeName :string,
   description: string,
   enName:string | null,
@@ -48,9 +48,9 @@ export interface FoundFilms {
     _id: number,
   },
   year: number
-}
+}>
 
-export type FilmArr = Array<{
+export type FilmType = {
   ageRating: null
   alternativeName:string
   backdrop: null
@@ -120,7 +120,7 @@ export type FilmArr = Array<{
   productionCompanies: []
   rating: {
     kp: number, 
-    imdb: number, 
+    imdb: any, 
     filmCritics: number, 
     russianFilmCritics: number, 
     await: number,
@@ -156,7 +156,9 @@ export type FilmArr = Array<{
   updatedAt: string
   videos: {
     teasers: []
-    trailers: []}
+    trailers: [
+      Record<string, string>
+    ]}
   votes: {
     kp: number, 
     imdb: number, 
@@ -168,4 +170,4 @@ export type FilmArr = Array<{
     _id: string,
     items: null}
     year: number
-}>
+} | undefined

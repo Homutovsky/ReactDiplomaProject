@@ -7,10 +7,16 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '../../theme/ThemeProvider'
-import { divForMap, inputStyle } from '../../common/style.styled';
+import { buttonCloseStyle, divForMap, inputStyle } from '../../common/style.styled';
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
+import { addFilmToFavorites, removeFilmToFavorites } from '../../redux/reducer/filmsSlice';
+import { AppDispatch } from '../../redux/store';
+import { useDispatch } from 'react-redux';
 
 
 export const SelectedFromSearch = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const [post, setPost] = useState<any>({})
   const params = useParams()
   const [error, setError] = useState(false)
@@ -29,6 +35,18 @@ export const SelectedFromSearch = () => {
 useEffect(() => {
   getFilmById()
 },[]) 
+
+
+const [addFilm, setAddFilm] = useState<any>(false)
+const pressFilmToFavorites = () => {
+  setAddFilm((prev:any) => !prev)
+  dispatch(addFilmToFavorites(post))
+  
+}
+const pressFilmRemoveFromFavorites = () => {
+  setAddFilm((prev:any) => !prev)
+  dispatch(removeFilmToFavorites(post.id))
+}
 
   const navigate = useNavigate()
   const [inputValue, setInputValue] = useState('')
@@ -95,6 +113,9 @@ useEffect(() => {
               {post?.description}
           </p>
           <h3>премьера({post.premiere?.country}) : {post.premiere?.world?.split('').splice(0, 10).join('')}</h3>
+          {!addFilm ? <Fab onClick={pressFilmToFavorites} size="medium" color="primary" aria-label="add">
+                <AddIcon />
+              </Fab> : <button onClick={pressFilmRemoveFromFavorites} style={buttonCloseStyle}></button>}
       </div>
     </div>
     <div style={{marginTop:'60px', display:'flex', justifyContent:'center'}}>

@@ -8,8 +8,9 @@ import Typography from '@mui/material/Typography';
 import { divForMap, inputStyle } from '../common/style.styled';
 import { useTheme } from '../theme/ThemeProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFilmFromSearchInArr } from '../redux/reducer/filmsSlice';
+import { addFilmFromSearchInArr} from '../redux/reducer/filmsSlice';
 import { AppDispatch, RootState } from '../redux/store';
+
 
 export const FoundFilms = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -42,7 +43,7 @@ export const FoundFilms = () => {
       setSearch(foundFilms.reduce((acc:any, item:any) => (item.poster && item.description)?[...acc, item]:acc,[]))
     },[])
     
-    
+
   return (
     <>
       <div className={'background'}></div>

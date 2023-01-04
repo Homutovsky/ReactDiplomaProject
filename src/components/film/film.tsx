@@ -12,8 +12,9 @@ import Fab from '@mui/material/Fab';
 import { useTheme } from '../theme/ThemeProvider'
 import '../.././App.css';
 import { useDispatch } from 'react-redux'
-import { addFilmFromSearchInArr, addFilmToFavorites } from '../redux/reducer/filmsSlice'
+import { addFilmFromSearchInArr, addFilmToFavorites, FilmArr, removeFilmToFavorites } from '../redux/reducer/filmsSlice'
 import { AppDispatch } from '../redux/store'
+import { FilmType } from '../types.ts/types'
 
 
 export const Film = () => {
@@ -39,14 +40,15 @@ export const Film = () => {
     getFilmById()
   },[])
 
-  const [addFilm, setAddFilm] = useState<any>(false)
+  const [addFilm, setAddFilm] = useState<boolean>(false)
   const pressFilmToFavorites = () => {
-    setAddFilm((prev:any) => !prev)
+    setAddFilm((prev:boolean) => !prev)
     dispatch(addFilmToFavorites(film))
     
   }
   const pressFilmRemoveFromFavorites = () => {
-    setAddFilm((prev:any) => !prev)
+    setAddFilm((prev:boolean) => !prev)
+    dispatch(removeFilmToFavorites(film.id))
   }
 
 
@@ -110,9 +112,7 @@ export const Film = () => {
               <h3>премьера({film?.premiere?.country}) : {film?.premiere?.world?.split('').splice(0, 10).join('')}</h3>
               {!addFilm ? <Fab onClick={pressFilmToFavorites} size="medium" color="primary" aria-label="add">
                 <AddIcon />
-              </Fab> : <button onClick={pressFilmRemoveFromFavorites} style={buttonCloseStyle}>1</button>}
-              
-              
+              </Fab> : <button onClick={pressFilmRemoveFromFavorites} style={buttonCloseStyle}></button>}
           </div>
         </div>
         <div style={{marginTop:'60px', display:'flex', justifyContent:'center'}}>
