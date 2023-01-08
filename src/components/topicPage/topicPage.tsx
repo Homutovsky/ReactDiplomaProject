@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Carousel from '../carousel/carousel'
-import { styleDiv, wrapperStyle } from '../common/style.styled';
 import { useTheme } from '../theme/ThemeProvider';
 
 const TOKEN = 'FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ'
@@ -35,8 +34,6 @@ export const TopicPage = () => {
       .then(response => response.json())
       .then(json => setSerials(json.docs))
   },[])
-
-console.log('films', films)
 
   return (
     <div>

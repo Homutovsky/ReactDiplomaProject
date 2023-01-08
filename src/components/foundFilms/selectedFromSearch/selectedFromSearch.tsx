@@ -10,14 +10,14 @@ import { useTheme } from '../../theme/ThemeProvider'
 import { buttonCloseStyle, divForMap, inputStyle } from '../../common/style.styled';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
-import { addFilmToFavorites, removeFilmToFavorites } from '../../redux/reducer/filmsSlice';
+import { addFilmToFavorites, FilmArr, removeFilmToFavorites } from '../../redux/reducer/filmsSlice';
 import { AppDispatch } from '../../redux/store';
 import { useDispatch } from 'react-redux';
-
+import { FilmType } from '../../types.ts/types';
 
 export const SelectedFromSearch = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const [post, setPost] = useState<any>({})
+  const [post, setPost] = useState<FilmType | undefined>()
   const params = useParams()
   const [error, setError] = useState(false)
   const currentTheme = useTheme()
@@ -36,30 +36,27 @@ useEffect(() => {
   getFilmById()
 },[]) 
 
-
-const [addFilm, setAddFilm] = useState<any>(false)
+const [addFilm, setAddFilm] = useState<boolean>(false)
 const pressFilmToFavorites = () => {
-  setAddFilm((prev:any) => !prev)
-  dispatch(addFilmToFavorites(post))
+  setAddFilm((prev:boolean) => !prev)
+  dispatch(addFilmToFavorites(post as any))
   
 }
 const pressFilmRemoveFromFavorites = () => {
-  setAddFilm((prev:any) => !prev)
-  dispatch(removeFilmToFavorites(post.id))
+  setAddFilm((prev:boolean) => !prev)
+  dispatch(removeFilmToFavorites(post?.id as any))
 }
 
   const navigate = useNavigate()
   const [inputValue, setInputValue] = useState('')
-  const [searchResult, setSearch] = useState<any>([])
-  const getSearch = (event:any) => {
+  const getSearch = (event:React.KeyboardEvent) => {
     if (event.code === "Enter" && inputValue !== "") {
       const getFilmByName = async () => {
         try {
           let upperSearchKey = inputValue.split('')[0].toUpperCase() + inputValue.slice(1, inputValue.length)
           const responce = await axios.get(`https://api.kinopoisk.dev/movie?field=name&search=${upperSearchKey}&token=FSXPQXQ-36BMCB3-Q3NNZNY-2XH0CGJ`)
           if (responce.data.docs.length) {
-            setSearch(responce)
-            navigate(`/foundFilms/${searchResult.data.docs[0].name}`)
+            navigate(`/foundFilms/${responce.data.docs[0].name}`)
           } else {
             navigate(`/errorPage`)
           }
@@ -70,7 +67,6 @@ const pressFilmRemoveFromFavorites = () => {
     getFilmByName()  
     }
   }
-
   
   return (
     <>
@@ -85,7 +81,7 @@ const pressFilmRemoveFromFavorites = () => {
         <h2 style={{textAlign:'center'}}>
           {post?.name || post?.alternativeName}({post?.year})
         </h2>
-        <img src={`${post.poster?.previewUrl}`} alt="poster"></img>
+        <img src={`${post?.poster?.previewUrl}`} alt="poster"></img>
       </div>
       <div style={{display:'flex', flexDirection:'column', marginTop:'51px', maxWidth:'400px'}}>
           <Box
@@ -94,17 +90,17 @@ const pressFilmRemoveFromFavorites = () => {
                   }}
                 >
                   <Typography component="legend">Rating</Typography>
-                  <Rating name="read-only" value={Math.round(post.rating?.imdb/2)} readOnly />
+                  <Rating name="read-only" value={Math.round(post?.rating?.imdb/2)} readOnly />
           </Box>
           <div style={divForMap}>
               <h3>страна: </h3>
-              {post.countries?.map((item:any) => ( 
+              {post?.countries?.map((item:any) => ( 
                     <p key={item?.name}>/ {item?.name}</p>    
                     ))}
           </div>
           <div style={divForMap}>
               <h3>жанр: </h3>
-              {post.genres?.map((item:any) => ( 
+              {post?.genres?.map((item:any) => ( 
                   <p key={item?.name}> / {item?.name} </p>    
                   ))}
           </div>
@@ -112,7 +108,7 @@ const pressFilmRemoveFromFavorites = () => {
           <p>
               {post?.description}
           </p>
-          <h3>премьера({post.premiere?.country}) : {post.premiere?.world?.split('').splice(0, 10).join('')}</h3>
+          <h3>премьера({post?.premiere?.country}) : {post?.premiere?.world?.split('').splice(0, 10).join('')}</h3>
           {!addFilm ? <Fab onClick={pressFilmToFavorites} size="medium" color="primary" aria-label="add">
                 <AddIcon />
               </Fab> : <button onClick={pressFilmRemoveFromFavorites} style={buttonCloseStyle}></button>}

@@ -1,5 +1,5 @@
 
-export type FoundFilmsArray = Array<{
+export type FoundFilms = {
   alternativeName :string,
   description: string,
   enName:string | null,
@@ -8,7 +8,7 @@ export type FoundFilmsArray = Array<{
     kpHD : string,
     _id :string,
   },
-  id:number, 
+  id?:number, 
   logo: {
     url: string
     _id: string
@@ -21,14 +21,14 @@ export type FoundFilmsArray = Array<{
     url: string,
     _id: string,
   },
-  rating : {
-    await: number
-    filmCritics: number
-    imdb: number
-    kp: number
-    russianFilmCritics: number
-    _id: string
-  },
+  rating? : {
+    await?: number
+    filmCritics?: number
+    imdb?: any
+    kp?: number
+    russianFilmCritics?: number
+    _id?: string
+  } | undefined,
   releaseYears: {
     start: number, 
     end: number, 
@@ -48,7 +48,9 @@ export type FoundFilmsArray = Array<{
     _id: number,
   },
   year: number
-}>
+}
+
+export  type FoundFilmsArray = Array<FoundFilms>
 
 export type FilmType = {
   ageRating: null

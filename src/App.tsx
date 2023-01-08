@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { Routes, Route, useNavigate, useLocation} from 'react-router-dom'
 import Cookies from "js-cookie";
 
@@ -40,8 +40,8 @@ function App(): JSX.Element {
     setTheme((prev:themeType)=> prev.type === 'light' ? themes.dark : themes.light)
   }
 
-  const [logined, setLogined] = useState(false)
-  const [isLogined, setIsLogined] = useState<any>(null)
+  const [logined, setLogined] = useState<boolean | string | undefined>(false)
+  const [isLogined, setIsLogined] = useState<string | undefined>()
   
   const navigate = useNavigate()
   const location = useLocation()
@@ -55,7 +55,7 @@ function App(): JSX.Element {
   },[isLogined])
 
   useEffect(() => {
-    const isLogined:any = Cookies.get('logined')
+    const isLogined:boolean | string | undefined = Cookies.get('logined')
     setLogined(isLogined)
 
     if(isLogined && location.pathname === '/SignUp') {
